@@ -1,36 +1,106 @@
 // src/features/auth/authSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginAPI } from './authAPI';
+import axios from 'axios';
+
+interface UserDetail {
+  useR_ID: string;
+  suR_NAME: string;
+  firsT_NAME: string;
+  email: string;
+  // Add other user fields as needed
+}
+
+interface MenuItem {
+  menuId: number;
+  menuName: string;
+  path: string;
+  icon?: string;
+  isAdd: boolean;
+  isEdit: boolean;
+  isDel: boolean;
+  isView: boolean;
+  displayNo: number;
+}
+
+interface ParentMenu {
+  menuId: number;
+  menuName: string;
+  displayNo: number;
+  childMenu: MenuItem[];
+}
+
+interface AuthState {
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  error: string;
+  user: UserDetail | null;
+  menuPermissions: ParentMenu[];
+  token: string;
+}
+
+const initialState: AuthState = {
+  isLoading: false,
+  isAuthenticated: false,
+  error: '',
+  user: null,
+  menuPermissions: [],
+  token: '',
+};
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (payload: { userId: string; password: string }, thunkAPI) => {
-    const response = await loginAPI(payload.userId, payload.password);
-    if (response.isSuccess) {
-      return response;
-    } else {
-      return thunkAPI.rejectWithValue(response.mesg);
+    try {
+      const response = await axios.post(
+        'https://dmsreactapi.mssplonline.com/api/USER/USERLOGIN',
+        {
+          useR_ID: payload.userId,
+          password: payload.password,
+          collageID: '1',
+          packageID: '1',
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+
+      if (response.data.isSuccess) {
+        return response.data;
+      } else {
+        return thunkAPI.rejectWithValue(response.data.mesg);
+      }
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.mesg || 'Network error',
+      );
     }
   },
 );
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {
-    isLoading: false,
-    isAuthenticated: false,
-    error: '',
+  initialState,
+  reducers: {
+    logout: state => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.menuPermissions = [];
+      state.token = '';
+    },
   },
-  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(loginUser.pending, state => {
         state.isLoading = true;
         state.error = '';
       })
-      .addCase(loginUser.fulfilled, state => {
+      .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isAuthenticated = true;
+        state.user = action.payload.data[0].userdetail[0];
+        state.menuPermissions =
+          action.payload.data[0].userPermission[0].parentMenu;
+        state.token = action.payload.data[0].token;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -39,4 +109,5 @@ const authSlice = createSlice({
   },
 });
 
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;
