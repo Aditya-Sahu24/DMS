@@ -187,11 +187,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '600',
-    backgroundColor: '#1976D2',
+    backgroundColor: '#388E3C',
     color: 'white',
     padding: 10,
     borderRadius: 6,
     marginBottom: 10,
+    textAlign: 'center'
   },
   searchBar: {
     backgroundColor: '#fff',

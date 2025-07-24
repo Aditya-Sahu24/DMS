@@ -60,11 +60,8 @@ export default function DocumentType({ navigation }: { navigation: any }) {
     <>
       <Header />
       <View style={styles.container}>
-        {/* Header with Back Button */}
+
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            {/* {<Ionicons name="arrow-back" size={24} color="#fff" />} */}
-          </TouchableOpacity>
           <Text style={styles.headerText}>Document Types</Text>
         </View>
 
@@ -110,12 +107,12 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 6,
     marginBottom: 10,
+    justifyContent: "center"
   },
   headerText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-    marginLeft: 10,
   },
   searchInput: {
     backgroundColor: '#fff',

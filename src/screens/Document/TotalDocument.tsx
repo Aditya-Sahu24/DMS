@@ -112,11 +112,7 @@ export default function TotalDocuments({ navigation }: { navigation: any }) {
     <>
       <Header />
       <View style={styles.container}>
-        {/* Back Button */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            {/* {<Ionicons name="arrow-back" size={24} color="#fff" />} */}
-          </TouchableOpacity>
           <Text style={styles.headerText}>Document Details</Text>
         </View>
 
@@ -166,12 +162,12 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
+    justifyContent: "center"
   },
   headerText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 18,
-    marginLeft: 10,
   },
   searchInput: {
     backgroundColor: '#fff',

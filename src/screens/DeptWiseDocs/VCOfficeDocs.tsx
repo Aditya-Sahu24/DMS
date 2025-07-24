@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 6,
     marginBottom: 10,
+    textAlign: 'center'
   },
   searchBar: {
     backgroundColor: '#fff',

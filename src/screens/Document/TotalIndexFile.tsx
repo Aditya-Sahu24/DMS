@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 12,
     borderRadius: 4,
+    textAlign: 'center'
   },
   searchInput: {
     marginVertical: 10,
