@@ -14,6 +14,53 @@ class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
       object : DefaultReactNativeHost(this) {
+
+        override fun getPackages(): List<ReactPackage> =
+            PackageList(this).packages.apply {
+              // Add manual packages here if needed
+            }
+
+        override fun getJSMainModuleName(): String = "index"
+
+        // Force disable Metro in debug
+        override fun getUseDeveloperSupport(): Boolean = false
+
+        // Make debug build load from the local bundle in assets
+        override fun getJSBundleFile(): String? {
+          return "assets://index.android.bundle"
+        }
+
+        override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+        override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
+      }
+
+  override val reactHost: ReactHost
+    get() = getDefaultReactHost(applicationContext, reactNativeHost)
+
+  override fun onCreate() {
+    super.onCreate()
+    loadReactNative(this)
+  }
+}
+
+
+
+/*package com.dms
+
+import android.app.Application
+import com.facebook.react.PackageList
+import com.facebook.react.ReactApplication
+import com.facebook.react.ReactHost
+import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
+import com.facebook.react.ReactNativeHost
+import com.facebook.react.ReactPackage
+import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
+import com.facebook.react.defaults.DefaultReactNativeHost
+
+class MainApplication : Application(), ReactApplication {
+
+  override val reactNativeHost: ReactNativeHost =
+      object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
               // Packages that cannot be autolinked yet can be added manually here, for example:
@@ -36,3 +83,4 @@ class MainApplication : Application(), ReactApplication {
     loadReactNative(this)
   }
 }
+*/

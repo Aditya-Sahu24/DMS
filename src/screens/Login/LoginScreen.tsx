@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../redux/features/auth/authSlice';
+import { loginUser, logout } from '../../redux/features/auth/authSlice';
 import { RootState, AppDispatch } from '../../redux/store';
 import { useNavigation } from '@react-navigation/native';
 
@@ -23,6 +23,7 @@ const LoginScreen = () => {
   const { isLoading, isAuthenticated, error } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
+    dispatch(logout());
     if (isAuthenticated) {
       navigation.navigate('Home' as never);
     }
