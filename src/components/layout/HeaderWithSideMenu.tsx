@@ -88,12 +88,13 @@ const HeaderWithSideDrawer: React.FC<HeaderWithSideDrawerProps> = ({
           <MenuIcon color="#fff" size={24} />
         </TouchableOpacity>
 
-
-        <Image
-          source={require('../../assets/images/Logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: "#fff", borderRadius: 8, marginRight: 5 }}>
+          <Image
+            source={require('../../assets/images/Logo2.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
         <TouchableOpacity onPress={() => { navigation.navigate("Home" as never) }}>
           <Text style={styles.title}>{title}</Text>
         </TouchableOpacity>
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 32,
     height: 32,
-    marginRight: 8,
+    // marginRight: 8,
   },
   title: {
     fontSize: 18,

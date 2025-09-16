@@ -21,7 +21,7 @@ const Header = () => {
   return (
     <View>
       <HeaderWithSideMenu
-        title="DMS"
+        title="DDMSS"
         menuItems={[
           { label: 'Home', onPress: () => navigation.navigate('Home' as never) },
           { label: 'Total Documents', onPress: () => navigation.navigate('TotalDocument' as never) },

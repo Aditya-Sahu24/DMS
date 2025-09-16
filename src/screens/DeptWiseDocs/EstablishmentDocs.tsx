@@ -40,6 +40,7 @@ interface DocMangrItem {
 }
 
 const columnWidths = {
+  srNo: 60,
   fileNo: 120,
   fileDef: 160,
   department: 180,
@@ -85,7 +86,10 @@ const EstablishmentDocs = () => {
     setExpanded(expanded === id ? null : id);
   };
 
-  const formatDate = (date: string) => new Date(date).toLocaleDateString();
+  const formatDate = (date: string) => {
+    const d = new Date(date);
+    return isNaN(d.getTime()) ? '-' : d.toLocaleDateString();
+  };
 
   const filteredData = data.filter(
     item =>
@@ -114,63 +118,74 @@ const EstablishmentDocs = () => {
           onChangeText={setSearchTerm}
         />
 
-        <ScrollView horizontal>
-          <View style={{ minWidth: 700 }}>
-            <View style={[styles.row, styles.tableHeader]}>
-              <Text style={[styles.cell, { width: columnWidths.fileNo }]}>File No</Text>
-              <Text style={[styles.cell, { width: columnWidths.fileDef }]}>Definition</Text>
-              <Text style={[styles.cell, { width: columnWidths.department }]}>Department</Text>
-              <Text style={[styles.cell, { width: columnWidths.fDate }]}>Date</Text>
-              <Text style={[styles.cell, { width: columnWidths.fileCount }]}>Files</Text>
-            </View>
+        {/* Total Count */}
+        <Text style={styles.countText}>
+          Total Records: {filteredData.length}
+        </Text>
 
-            {filteredData.map((item, index) => (
-              <View key={item.docMid}>
-                <TouchableOpacity
-                  onPress={() => handleToggleExpand(item.docMid)}
-                  style={[
-                    styles.row,
-                    index % 2 === 0 ? styles.dataRow : styles.alternateRow,
-                  ]}
-                >
-                  <Text style={[styles.cell, { width: columnWidths.fileNo }]}>{item.fileNo}</Text>
-                  <Text style={[styles.cell, { width: columnWidths.fileDef }]}>{item.fileDef || '-'}</Text>
-                  <Text style={[styles.cell, { width: columnWidths.department }]}>{item.department_Name}</Text>
-                  <Text style={[styles.cell, { width: columnWidths.fDate }]}>{formatDate(item.fDate)}</Text>
-                  <Text style={[styles.cell, { width: columnWidths.fileCount }]}>
-                    {item.member_DocFiles?.length}
-                  </Text>
-                </TouchableOpacity>
-
-                {expanded === item.docMid && (
-                  <View style={styles.detailsContainer}>
-                    <Text style={styles.detailsTitle}>Details for Document #{item.docMid}</Text>
-                    <Text><Text style={styles.bold}>Synopsis:</Text> {item.synopsis}</Text>
-                    <Text><Text style={styles.bold}>Completion:</Text> {item.complt}</Text>
-                    <Text><Text style={styles.bold}>Auth Person:</Text> {item.authPersn}</Text>
-                    <Text><Text style={styles.bold}>Sub-Subject Name:</Text> {item.sub_Subject_Name}</Text>
-                    <Text><Text style={styles.bold}>File Type Name:</Text> {item.fileType_Name}</Text>
-                    <Text><Text style={styles.bold}>Period From:</Text> {formatDate(item.perFr)}</Text>
-                    <Text><Text style={styles.bold}>Period Until:</Text> {formatDate(item.perUt)}</Text>
-                    <Text><Text style={styles.bold}>Create Date:</Text> {formatDate(item.createdate)}</Text>
-
-                    <Text style={styles.subHeader}>Associated Files ({item.member_DocFiles?.length})</Text>
-                    {item.member_DocFiles.map(file => (
-                      <View key={file.pdFid} style={styles.fileBox}>
-                        <Text style={styles.bold}>{file.pdfName} (ID: {file.pdFid})</Text>
-                        <Text>Keywords: {file.keywords || '-'}</Text>
-                        <Text>Sub Type: {file.subFtype || '-'}</Text>
-                        <Text>File Date: {formatDate(file.pDate)}</Text>
-                        <Text>Is Main: {file.isMain || 'No'}</Text>
-                        <Text>Entry Date: {formatDate(file.entryDate)}</Text>
-                        <Text>Path: {file.pdfPath}</Text>
-                      </View>
-                    ))}
-                  </View>
-                )}
+        {/* Outer vertical scroll for table + expanded details */}
+        <ScrollView style={{ flex: 1 }}>
+          {/* Inner horizontal scroll for wide table */}
+          <ScrollView horizontal>
+            <View style={{ minWidth: 760 }}>
+              <View style={[styles.row, styles.tableHeader]}>
+                <Text style={[styles.cell, { width: columnWidths.srNo }]}>Sr. No</Text>
+                <Text style={[styles.cell, { width: columnWidths.fileNo }]}>File No</Text>
+                <Text style={[styles.cell, { width: columnWidths.fileDef }]}>Definition</Text>
+                <Text style={[styles.cell, { width: columnWidths.department }]}>Department</Text>
+                <Text style={[styles.cell, { width: columnWidths.fDate }]}>Date</Text>
+                <Text style={[styles.cell, { width: columnWidths.fileCount }]}>Files</Text>
               </View>
-            ))}
-          </View>
+
+              {filteredData.map((item, index) => (
+                <View key={item.docMid}>
+                  <TouchableOpacity
+                    onPress={() => handleToggleExpand(item.docMid)}
+                    style={[
+                      styles.row,
+                      index % 2 === 0 ? styles.dataRow : styles.alternateRow,
+                    ]}
+                  >
+                    <Text style={[styles.cell, { width: columnWidths.srNo }]}>{index + 1}</Text>
+                    <Text style={[styles.cell, { width: columnWidths.fileNo }]}>{item.fileNo}</Text>
+                    <Text style={[styles.cell, { width: columnWidths.fileDef }]}>{item.fileDef || '-'}</Text>
+                    <Text style={[styles.cell, { width: columnWidths.department }]}>{item.department_Name}</Text>
+                    <Text style={[styles.cell, { width: columnWidths.fDate }]}>{formatDate(item.fDate)}</Text>
+                    <Text style={[styles.cell, { width: columnWidths.fileCount }]}>
+                      {item.member_DocFiles?.length}
+                    </Text>
+                  </TouchableOpacity>
+
+                  {expanded === item.docMid && (
+                    <View style={styles.detailsContainer}>
+                      <Text style={styles.detailsTitle}>Details for Document #{item.docMid}</Text>
+                      <Text><Text style={styles.bold}>Synopsis:</Text> {item.synopsis}</Text>
+                      <Text><Text style={styles.bold}>Completion:</Text> {item.complt}</Text>
+                      <Text><Text style={styles.bold}>Auth Person:</Text> {item.authPersn}</Text>
+                      <Text><Text style={styles.bold}>Sub-Subject Name:</Text> {item.sub_Subject_Name}</Text>
+                      <Text><Text style={styles.bold}>File Type Name:</Text> {item.fileType_Name}</Text>
+                      <Text><Text style={styles.bold}>Period From:</Text> {formatDate(item.perFr)}</Text>
+                      <Text><Text style={styles.bold}>Period Until:</Text> {formatDate(item.perUt)}</Text>
+                      <Text><Text style={styles.bold}>Create Date:</Text> {formatDate(item.createdate)}</Text>
+
+                      <Text style={styles.subHeader}>Associated Files ({item.member_DocFiles?.length})</Text>
+                      {item.member_DocFiles.map(file => (
+                        <View key={file.pdFid} style={styles.fileBox}>
+                          <Text style={styles.bold}>{file.pdfName} (ID: {file.pdFid})</Text>
+                          <Text>Keywords: {file.keywords || '-'}</Text>
+                          <Text>Sub Type: {file.subFtype || '-'}</Text>
+                          <Text>File Date: {formatDate(file.pDate)}</Text>
+                          <Text>Is Main: {file.isMain || 'No'}</Text>
+                          <Text>Entry Date: {formatDate(file.entryDate)}</Text>
+                          <Text>Path: {file.pdfPath}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              ))}
+            </View>
+          </ScrollView>
         </ScrollView>
       </View>
     </>
@@ -201,7 +216,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderWidth: 1,
     borderColor: '#ccc',
+    marginBottom: 8,
+  },
+  countText: {
+    fontSize: 14,
+    fontWeight: '500',
     marginBottom: 12,
+    color: '#333',
   },
   tableHeader: {
     backgroundColor: '#e0e0e0',
@@ -260,3 +281,17 @@ const styles = StyleSheet.create({
 });
 
 export default EstablishmentDocs;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

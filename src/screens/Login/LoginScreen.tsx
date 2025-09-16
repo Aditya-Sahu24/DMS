@@ -42,8 +42,8 @@ const LoginScreen = () => {
     >
       {/* Logo Section */}
       <View style={styles.logoBox}>
-        <Image source={require('../../assets/images/Logo.png')} style={styles.logo} resizeMode="contain" />
-        <Text style={styles.subTitle}>Document Management System</Text>
+        <Image source={require('../../assets/images/Logo2.png')} style={styles.logo} resizeMode="contain" />
+        <Text style={styles.subTitle}>Digital Document Management System Software</Text>
       </View>
 
       {/* Login Form Card */}

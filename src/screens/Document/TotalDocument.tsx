@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
 import axios from 'axios';
 import Header from '../../components/layout/Header';
-// import { Ionicons } from '@expo/vector-icons'; // For back arrow
 
 interface FileItem {
   pdFid: number;
@@ -73,11 +72,11 @@ export default function TotalDocuments({ navigation }: { navigation: any }) {
     return (
       <View style={styles.rowContainer}>
         <TouchableOpacity onPress={() => toggleExpand(item.docMid)} style={styles.row}>
-          <Text style={styles.cell}>{item.fileNo}</Text>
-          <Text style={styles.cell}>{item.fileDef || '-'}</Text>
-          <Text style={styles.cell}>{item.department_Name}</Text>
-          <Text style={styles.cell}>{new Date(item.createdate).toLocaleDateString()}</Text>
-          <Text style={styles.cell}>{item.member_DocFiles?.length || 0}</Text>
+          <Text style={[styles.cell, styles.colFileNo]}>{item.fileNo}</Text>
+          <Text style={[styles.cell, styles.colDef]}>{item.fileDef || '-'}</Text>
+          <Text style={[styles.cell, styles.colDept]}>{item.department_Name}</Text>
+          <Text style={[styles.cell, styles.colDate]}>{new Date(item.createdate).toLocaleDateString()}</Text>
+          <Text style={[styles.cell, styles.colFiles]}>{item.member_DocFiles?.length || 0}</Text>
         </TouchableOpacity>
 
         {isExpanded && (
@@ -126,11 +125,11 @@ export default function TotalDocuments({ navigation }: { navigation: any }) {
 
         {/* Table Header */}
         <View style={styles.tableHeader}>
-          <Text style={styles.cell}>File No</Text>
-          <Text style={styles.cell}>Definition</Text>
-          <Text style={styles.cell}>Department</Text>
-          <Text style={styles.cell}>Date</Text>
-          <Text style={styles.cell}>Files</Text>
+          <Text style={[styles.cell, styles.colFileNo]}>File No</Text>
+          <Text style={[styles.cell, styles.colDef]}>Definition</Text>
+          <Text style={[styles.cell, styles.colDept]}>Department</Text>
+          <Text style={[styles.cell, styles.colDate]}>Date</Text>
+          <Text style={[styles.cell, styles.colFiles]}>Files</Text>
         </View>
 
         <ScrollView>
@@ -195,9 +194,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   cell: {
-    flex: 1,
     fontSize: 12,
+    paddingHorizontal: 4,
   },
+  // proportional column widths
+  colFileNo: { flex: 1.2 },   // File numbers usually short
+  colDef: { flex: 2.5 },      // Definition needs more space
+  colDept: { flex: 2 },       // Department names medium
+  colDate: { flex: 1.5 },     // Dates fixed width
+  colFiles: { flex: 0.8, textAlign: "center" }, // File count small
+
   expandedBox: {
     backgroundColor: '#f2f2f2',
     padding: 10,
@@ -218,3 +224,13 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
 });
+
+
+
+
+
+
+
+
+
+
