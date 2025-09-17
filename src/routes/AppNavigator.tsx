@@ -12,6 +12,8 @@ import MaintainanceDocs from '../screens/DeptWiseDocs/MaintainanceDocs';
 import EstablishmentDocs from '../screens/DeptWiseDocs/EstablishmentDocs';
 import VCOfficeDocs from '../screens/DeptWiseDocs/VCOfficeDocs';
 
+import PdfViewer from '../components/common/PdfViewer';
+
 // Create the navigator with the type parameter
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -78,6 +80,12 @@ const AppNavigator = () => {
         name="VCOfficeDept"
         component={VCOfficeDocs}
         options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="PdfViewer"
+        component={PdfViewer}
+        options={{ headerShown: true, title: 'PDF Preview' }}
       />
     </Stack.Navigator>
   );

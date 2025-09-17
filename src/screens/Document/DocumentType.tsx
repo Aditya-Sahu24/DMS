@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import axios from 'axios';
+import { api } from '../../utils/Url';
 import Header from '../../components/layout/Header';
-// import { Ionicons } from '@expo/vector-icons';
 
 interface DocumentType {
   docID: number;
@@ -22,8 +21,8 @@ export default function DocumentType({ navigation }: { navigation: any }) {
 
   const fetchDocumentTypes = async () => {
     try {
-      const response = await axios.post(
-        'https://dmsreactapi.mssplonline.com/api/OtherDocType/GetOtherDocType',
+      const response = await api.post(
+        'OtherDocType/GetOtherDocType',
         {
           docID: -1,
           parentDocId: 0,

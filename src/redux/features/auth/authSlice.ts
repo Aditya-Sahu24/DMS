@@ -1,6 +1,6 @@
 // src/features/auth/authSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { api } from '../../../utils/Url';
 
 interface UserDetail {
   useR_ID: string;
@@ -51,8 +51,8 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (payload: { userId: string; password: string }, thunkAPI) => {
     try {
-      const response = await axios.post(
-        'https://dmsreactapi.mssplonline.com/api/USER/USERLOGIN',
+      const response = await api.post(
+        'USER/USERLOGIN',
         {
           useR_ID: payload.userId,
           password: payload.password,

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import axios from 'axios';
+import { api } from '../../utils/Url'; // Import the same api instance
 import Header from '../../components/layout/Header';
 
 interface DocFile {
@@ -48,7 +48,7 @@ const columnWidths = {
   fileCount: 80,
 };
 
-const VCOfficeDocs = () => {
+const VCOfficeDocs = ({ navigation }: { navigation: any }) => {
   const [data, setData] = useState<DocMangrItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
@@ -56,12 +56,12 @@ const VCOfficeDocs = () => {
 
   const fetchDocuments = async () => {
     try {
-      const response = await axios.post(
-        'https://dmsreactapi.mssplonline.com/api/DocMangr/GetDocMangr',
+      const response = await api.post(
+        'DocMangr/GetDocMangr',
         {
           docMid: -1,
           fileTypId: -1,
-          divisionid: 9,
+          divisionid: 9, // Keep the divisionid as 9 for VC Office
           subsubjId: -1,
           user_Id: -1,
           fileNo: '',
@@ -173,7 +173,13 @@ const VCOfficeDocs = () => {
                           <Text>File Date: {formatDate(file.pDate)}</Text>
                           <Text>Is Main: {file.isMain || 'No'}</Text>
                           <Text>Entry Date: {formatDate(file.entryDate)}</Text>
-                          <Text>Path: {file.pdfPath}</Text>
+                          {/* Add PDF button with same navigation and style as TotalDocuments */}
+                          <TouchableOpacity
+                            style={styles.showDocButton}
+                            onPress={() => navigation.navigate("PdfViewer", { uri: file.pdfPath })}
+                          >
+                            <Text style={styles.showDocText}>Show Document</Text>
+                          </TouchableOpacity>
                         </View>
                       ))}
                     </View>
@@ -275,18 +281,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  // Add styles for the PDF button (same as TotalDocuments)
+  showDocButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1976D2",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    marginTop: 6,
+    alignSelf: "flex-start",
+  },
+  showDocText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 13,
+  },
 });
 
 export default VCOfficeDocs;
-
-
-
-
-
-
-
-
-
-
-
-

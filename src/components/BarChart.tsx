@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
-import axios from 'axios';
+import { api } from '../utils/Url';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -35,8 +35,8 @@ const DepartmentWiseBarChart = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .post('https://dmsreactapi.mssplonline.com/api/DashboardEntity/GetDashboardData', {
+    api
+      .post('DashboardEntity/GetDashboardData', {
         type: 9,
         pageID: 1,
         searchBy: '',

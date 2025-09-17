@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
-import axios from 'axios';
+import { api } from '../../utils/Url';
 import Header from '../../components/layout/Header';
 
 interface FileItem {
@@ -39,8 +39,8 @@ export default function TotalDocuments({ navigation }: { navigation: any }) {
 
   const fetchDocuments = async () => {
     try {
-      const response = await axios.post(
-        'https://dmsreactapi.mssplonline.com/api/DocMangr/GetDocMangr',
+      const response = await api.post(
+        'DocMangr/GetDocMangr',
         {
           docMid: -1,
           fileTypId: -1,
@@ -98,7 +98,12 @@ export default function TotalDocuments({ navigation }: { navigation: any }) {
                 <Text>Keywords: {file.keywords || '-'}</Text>
                 <Text>Sub Type: {file.subFtype || '-'}</Text>
                 <Text>Entry Date: {new Date(file.entryDate).toLocaleDateString()}</Text>
-                <Text>Path: {file.pdfPath}</Text>
+                <TouchableOpacity
+                  style={styles.showDocButton}
+                  onPress={() => navigation.navigate("PdfViewer", { uri: file.pdfPath })}
+                >
+                  <Text style={styles.showDocText}>Show Document</Text>
+                </TouchableOpacity>
               </View>
             ))}
           </View>
@@ -223,6 +228,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
   },
+  showDocButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1976D2",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    marginTop: 6,
+    alignSelf: "flex-start",
+  },
+  showDocText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 13,
+  },
+
+
 });
 
 

@@ -11,6 +11,7 @@ export type RootStackParamList = {
   MaintainanceDept: undefined;
   EstablishmentDept: undefined;
   VCOfficeDept: undefined;
+  PdfViewer: { uri: string }; // New screen for PDF viewing
   // Add other screens here
 };
 

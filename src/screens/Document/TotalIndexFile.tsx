@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
+import { api } from '../../utils/Url';
 import Header from '../../components/layout/Header';
 
 interface FileItem {
@@ -28,28 +29,21 @@ const TotalIndexFile: React.FC = () => {
 
   const fetchFiles = async () => {
     try {
-      const response = await fetch(
-        'https://dmsreactapi.mssplonline.com/api/DashboardEntity/GetDashboardData',
+      const response = await api.post(
+        'DashboardEntity/GetDashboardData',
         {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            type: 10,
-            pageID: 1,
-            searchBy: '',
-            fromdt: '1900-01-01',
-            todt: '2025-07-23',
-            print: 1,
-          }),
+          type: 10,
+          pageID: 1,
+          searchBy: '',
+          fromdt: '1900-01-01',
+          todt: '2025-07-23',
+          print: 1,
         }
       );
 
-      const json = await response.json();
-      if (json?.isSuccess && json.data?.totalIndex) {
-        setFiles(json.data.totalIndex);
-        setFilteredFiles(json.data.totalIndex);
+      if (response.data?.isSuccess && response.data.data?.totalIndex) {
+        setFiles(response.data.data.totalIndex);
+        setFilteredFiles(response.data.data.totalIndex);
       }
     } catch (error) {
       console.error('Error fetching index files:', error);
